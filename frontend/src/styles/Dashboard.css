@@ -1,0 +1,71 @@
+/* Dashboard.css */
+
+.dashboard {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .show-row {
+    margin-bottom: 20px;
+  }
+  
+  .show-row h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .projects .cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .card {
+    background-color: #e9ecef;
+    border-radius: 8px;
+    width: 350px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .card h4 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+  
+  .card p {
+    font-size: 18px;
+    margin: 8px 0;
+  }
+  
+  .card svg {
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button svg {
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  p {
+    max-width: 600px;
+    text-align: center;
+    font-size: 16px;
+  }
+  
