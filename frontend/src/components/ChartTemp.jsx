@@ -1,55 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, TimeScale } from "chart.js";
+import {
+  Chart as ChartJS,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  TimeScale,
+} from "chart.js";
 import "chartjs-adapter-date-fns";
 
 // Register Chart.js modules
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, TimeScale);
 
-const ChartTemp = () => {
+const ChartComponent = () => {
   const [temperatureData, setTemperatureData] = useState(null);
   const [humidityData, setHumidityData] = useState(null);
   const [url, setUrl] = useState("/chart-data/");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchData = async (endpoint) => {
+  // Fetch data from the backend
+  const fetchData = async () => {
     setLoading(true);
     setError(null);
-
     try {
-      const response = await fetch(endpoint);
-
-      // Ensure the response is valid
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      // Validate content type
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new Error("Invalid response format. Expected JSON.");
-      }
-
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
       const data = await response.json();
 
-      // Validate the structure of the data
-      if (!data.temps || !data.temperature || !data.humidity) {
-        throw new Error("Invalid data format. Expected keys: 'temps', 'temperature', 'humidity'.");
-      }
-
-      // Extract the last 27 entries
+      // Process data
       const labels = data.temps.slice(-27);
-      const tempValues = data.temperature.slice(-27);
-      const humValues = data.humidity.slice(-27);
+      const temperatureValues = data.temperature.slice(-27);
+      const humidityValues = data.humidity.slice(-27);
 
-      // Set temperature chart data
       setTemperatureData({
         labels,
         datasets: [
           {
             label: "Température (°C)",
-            data: tempValues,
+            data: temperatureValues,
             borderColor: "rgb(255, 99, 132)",
             backgroundColor: "rgba(255, 99, 132, 0.2)",
             borderWidth: 2,
@@ -59,13 +49,12 @@ const ChartTemp = () => {
         ],
       });
 
-      // Set humidity chart data
       setHumidityData({
         labels,
         datasets: [
           {
             label: "Humidité (%)",
-            data: humValues,
+            data: humidityValues,
             borderColor: "rgb(54, 162, 235)",
             backgroundColor: "rgba(54, 162, 235, 0.2)",
             borderWidth: 2,
@@ -74,17 +63,16 @@ const ChartTemp = () => {
           },
         ],
       });
-
-      setLoading(false);
     } catch (err) {
-      console.error("Error fetching data:", err);
-      setError("Failed to load data. Please try again later.");
+      console.error(err);
+      setError("Failed to load data. Please try again.");
+    } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData(url);
+    fetchData();
   }, [url]);
 
   return (
@@ -94,8 +82,10 @@ const ChartTemp = () => {
         <button onClick={() => setUrl("/chart-data-semaine/")}>Historique de cette semaine</button>
         <button onClick={() => setUrl("/chart-data-mois/")}>Historique de ce mois</button>
       </div>
-      {loading && <p>Loading data...</p>}
+
+      {loading && <p>Chargement des données...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
+
       {!loading && !error && (
         <>
           <div className="graphique-temp" style={{ marginBottom: "30px" }}>
@@ -129,6 +119,7 @@ const ChartTemp = () => {
               }}
             />
           </div>
+
           <div className="graphique-hum">
             <h3 style={{ textAlign: "center" }}>Humidité</h3>
             <Line
@@ -166,4 +157,4 @@ const ChartTemp = () => {
   );
 };
 
-export default ChartTemp;
+export default ChartComponent;

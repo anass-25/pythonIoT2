@@ -31,23 +31,41 @@ const CardView = () => {
   return (
     <div className="projects">
       <h2>Sensor Data</h2>
-      <div className="card-container">
+      <div className="card-container" style={{ display: "flex", gap: "20px", justifyContent: "center" }}>
         {error ? (
           <p style={{ color: "red" }}>{error}</p> // Display any errors
         ) : data ? (
-          <div className="card big-card">
-            <p>
-              <FaTemperatureHigh style={{ color: "red", fontSize: "2rem", marginRight: "10px" }} />
-              <strong>Temperature: </strong>  {data.temperature} °C
-            </p>
-            <p>
-              <FaTint style={{ color: "blue", fontSize: "2rem", marginRight: "10px" }} />
-              <strong>Humidité: </strong>  {data.humidity} %
-            </p>
-            <p>
-            <strong>temps : </strong>  {data.date} 
-            </p>
-          </div>
+          <>
+            {/* Card for Temperature */}
+            <div className="card temperature-card" style={{ padding: "20px", border: "1px solid #ccc", borderRadius: "10px", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}>
+              <h3 style={{ textAlign: "center", color: "red" }}>
+                <FaTemperatureHigh style={{ fontSize: "2rem", marginRight: "10px" }} />
+                Température
+              </h3>
+              <p style={{ fontSize: "1.5rem", textAlign: "center" }}>
+                <strong>{data.temperature} °C</strong>
+              </p>
+              <p style={{ textAlign: "center", color: "#555" }}>
+                <strong>Temps : </strong>
+                {new Date(data.date).toLocaleString()}
+              </p>
+            </div>
+
+            {/* Card for Humidity */}
+            <div className="card humidity-card" style={{ padding: "20px", border: "1px solid #ccc", borderRadius: "10px", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)" }}>
+              <h3 style={{ textAlign: "center", color: "blue" }}>
+                <FaTint style={{ fontSize: "2rem", marginRight: "10px" }} />
+                Humidité
+              </h3>
+              <p style={{ fontSize: "1.5rem", textAlign: "center" }}>
+                <strong>{data.humidity} %</strong>
+              </p>
+              <p style={{ textAlign: "center", color: "#555" }}>
+                <strong>Temps : </strong>
+                {new Date(data.date).toLocaleString()}
+              </p>
+            </div>
+          </>
         ) : (
           <p>Loading data...</p>
         )}
